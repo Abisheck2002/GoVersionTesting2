@@ -17,28 +17,29 @@ jobs:
         run: |
           git config user.name "Abisheck2002"
           git config user.email "abisheck.g@netxd.com"
-
       - name: Get the latest tag
         id: get-latest-tag
         run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
 
-      - name: Set tag output
-        id: set_tag
-        run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-
-      - name: Use tag output
-        run: echo "The tag is ${{ env.TAG }}"
-
+      - name: Get previous tag old
+        run: |
+          git fetch --prune --unshallow
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1)
+          echo "Previous tag: $PREV_TAG"
+      - name: Get previous tag
+        id: get_previous_tag
+        run: |
+          previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
+          echo "Previous version in new : $previous_tag"
       
       - name: Bump version
         id: bump_version
         run: |
           # Extract the previous tag
-          previous_tag="${{ steps.getPreVersion.outputs.PREV_TAG }}"
+          previous_tag="${{ steps.get_previous_tag.outputs.previous_tag }}"
           
           # Extract the version number
-          version="${previous_tag}"
-
+          version="${previous_tag##*/v}"
           echo "Version $version"
           
           # Increment the version (assuming it follows semantic versioning X.Y.Z)
@@ -47,7 +48,6 @@ jobs:
           new_version="${major}.${minor}.${patch}"
           
           echo "New Version = $new_version"
-
       - name: Tag and push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
