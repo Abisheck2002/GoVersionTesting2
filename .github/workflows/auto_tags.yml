@@ -17,11 +17,15 @@ jobs:
         run: |
           git config user.name "Abisheck2002"
           git config user.email "abisheck.g@netxd.com"
-
       - name: Get the latest tag
         id: get-latest-tag
         run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
 
+      - name: Get previous tag old
+        run: |
+          git fetch --prune --unshallow
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1)
+          echo "Previous tag: $PREV_TAG"
       - name: Get previous tag
         id: get_previous_tag
         run: |
@@ -44,7 +48,6 @@ jobs:
           new_version="${major}.${minor}.${patch}"
           
           echo "New Version = $new_version"
-
       - name: Tag and push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,10 +55,3 @@ jobs:
           new_tag="v${{ steps.bump_version.outputs.new_version }}"
           git tag "$new_tag"
           git push origin "$new_tag"
-
-      - name: Set tag output
-        id: set_tag
-        run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-
-      - name: Use tag output
-        run: echo "The tag is ${{ env.TAG }}"
