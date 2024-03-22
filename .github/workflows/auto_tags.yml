@@ -22,11 +22,11 @@ jobs:
         id: get-latest-tag
         run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
 
-      - name: Set tag GITHUB_ENV
+      - name: Set tag output
         id: set_tag
         run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
-      - name: Use tag GITHUB_ENV
+      - name: Use tag output
         run: echo "The tag is ${{ env.TAG }}"
 
       
