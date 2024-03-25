@@ -23,13 +23,13 @@ jobs:
 
           if [ -z "$LATEST_QA_TAG" ]; then
             # If no _QA tags found, start with initial version and branch name
-            NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}_SB"
+            NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
           else
             # Extract the version number from the latest _QA tag
             VERSION=$(echo "$LATEST_QA_TAG" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
 
             # Construct the new _SB tag
-            NEW_TAG="V${VERSION}_${GITHUB_REF#refs/heads/}_SB"
+            NEW_TAG="V${VERSION}_${GITHUB_REF#refs/heads/}"
           fi
 
           echo "Generated new _SB tag: $NEW_TAG"
