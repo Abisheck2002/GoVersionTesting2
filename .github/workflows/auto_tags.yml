@@ -19,15 +19,14 @@ jobs:
         id: generate_tag
         run: |
           # Find the latest tag if available
-          git fetch --tags origin QA
-          LATEST_TAG=$(git describe --tags --abbrev=0 origin/QA)
-          echo "Latest tag in QA branch: $LATEST_TAG"
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
 
           if [ -z "$LATEST_TAG" ]; then
             # If no tags found, start with initial version and branch name
-            NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
-          else
+            git fetch --tags origin QA
+            LATEST_TAG=$(git describe --tags --abbrev=0 origin/QA)
+            echo "Latest tag in QA branch: $LATEST_TAG"
+            echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
             # Extract the version number and branch name from the latest tag
             VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
             VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
@@ -35,6 +34,17 @@ jobs:
 
             # Increment the version number
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3 + 1}')
+
+            # Construct the new tag with the desired branch name
+            NEW_TAG="V${NEW_VERSION}_SB"
+          else
+            # Extract the version number and branch name from the latest tag
+            VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
+            VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+            BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
+
+            # Increment the version number
+            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
             # Construct the new tag with the desired branch name
             NEW_TAG="V${NEW_VERSION}_SB"
