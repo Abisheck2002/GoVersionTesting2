@@ -1,60 +1,38 @@
-name: Auto Tag on Commit
+name: Create QA Tag
 
 on:
   push:
     branches:
-      - QA  # Adjust this to the branch you want to tag
+      - main
 
 jobs:
-  auto-tag:
+  create_qa_tag:
+    name: Create QA Tag
     runs-on: ubuntu-latest
-
+    
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
+    - name: Create QA branch
+      run: git checkout -b QA
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Get latest tag version
+      id: get_tag
+      run: echo ::set-output name=latest_tag::$(git describe --tags --abbrev=0)
 
-      - name: Set up Git
-        run: |
-          git config user.name "Abisheck2002"
-          git config user.email "abisheck.g@netxd.com"
-      - name: Get the latest tag
-        id: get-latest-tag
-        run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+    - name: Extract version number
+      id: extract_version
+      run: echo ::set-output name=latest_version::${{ steps.get_tag.outputs.latest_tag | replace('V0.0.','') | split('_')[0] }}
 
-      - name: Get previous tag old
-        run: |
-          git fetch --prune --unshallow
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1)
-          echo "Previous tag: $PREV_TAG"
-      - name: Get previous tag
-        id: get_previous_tag
-        run: |
-          previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
-          echo "Previous version in new : $previous_tag"
-          
-      
-      - name: Bump version
-        id: bump_version
-        run: |
-          # Extract the previous tag
-          previous_tag="${{ steps.get_previous_tag.outputs.previous_tag }}"
-          
-          # Extract the version number
-          version="${previous_tag##*/v}"
-          echo "Version $version"
-          
-          # Increment the version (assuming it follows semantic versioning X.Y.Z)
-          IFS='.' read -r major minor patch <<< "$version"
-          patch=$((patch + 1))
-          new_version="${major}.${minor}.${patch}"
-          
-          echo "New Version = $new_version"
-      - name: Tag and push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          new_tag="v${{ steps.bump_version.outputs.new_version }}"
-          git tag "$new_tag"
-          git push origin "$new_tag"
+    - name: Increment version number
+      id: increment_version
+      run: echo ::set-output name=next_version::$((${{ steps.extract_version.outputs.latest_version }} + 1))
+
+    - name: Create new tag
+      id: create_tag
+      run: |
+        next_version=${{ steps.increment_version.outputs.next_version }}
+        git tag "V0.0.${next_version}_QA"
+        git push origin "V0.0.${next_version}_QA"
+        echo "New tag created: V0.0.${next_version}_QA"
