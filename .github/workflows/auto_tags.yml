@@ -33,7 +33,7 @@ jobs:
             MAJOR=$(echo "$VERSION" | cut -d'.' -f1)
             MINOR=$(echo "$VERSION" | cut -d'.' -f2)
             PATCH=$(echo "$VERSION" | cut -d'.' -f3)
-            
+            NEW_PATCH=$((PATCH + 1))
 
             # Construct the new tag with the desired branch name
             NEW_TAG="V${MAJOR}.${MINOR}.${NEW_PATCH}_SB"
