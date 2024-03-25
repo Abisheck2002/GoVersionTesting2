@@ -33,8 +33,8 @@ jobs:
             # Increment the version number
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
-            # Construct the new tag
-            NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
+            # Construct the new tag with the desired branch name
+            NEW_TAG="V${NEW_VERSION}_SB"
           fi
 
           echo "Generated new tag: $NEW_TAG"
