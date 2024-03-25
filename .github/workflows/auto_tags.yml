@@ -19,6 +19,7 @@ jobs:
         run: |
           VERSION_PREFIX="V"
           VERSION_MAJOR_MINOR="1.0"
+          VERSION_SUFFIX="_QA"
           
           # Find the latest tag if available
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
