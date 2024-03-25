@@ -32,8 +32,8 @@ jobs:
             VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
             BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
 
-            # Increment the version number
-            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3 + 1}')
+            
+            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
             # Construct the new tag with the desired branch name
             NEW_TAG="V${NEW_VERSION}_SB"
@@ -44,7 +44,7 @@ jobs:
             BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
 
             # Increment the version number
-            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
+            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3 + 1}')
 
             # Construct the new tag with the desired branch name
             NEW_TAG="V${NEW_VERSION}_SB"
