@@ -1,4 +1,4 @@
 # GoVersionTesting2
 
 
-Check4
+Check6
