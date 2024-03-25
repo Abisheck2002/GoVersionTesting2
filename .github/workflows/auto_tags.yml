@@ -55,6 +55,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          new_tag="v${{ steps.bump_version.outputs.new_version }}"
+          new_tag="v${{ steps.bump_version.outputs.new_version }}_QA"
           git tag "$new_tag"
           git push origin "$new_tag"
