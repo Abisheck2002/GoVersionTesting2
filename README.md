@@ -6,7 +6,4 @@ Check4
 
 check5
 
-
-GG
-jkp
-ssssssssssssssssssssssssssssss
+check 4
