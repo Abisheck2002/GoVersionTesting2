@@ -9,7 +9,7 @@ on:
 jobs:
   build_MINOR_RELEASE:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/QA' && contains(github.event.head_commit.message, 'MINOR_RELEASE')
+    if: contains(github.event.head_commit.message, 'MINOR_RELEASE')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
   build_MAJOR_RELEASE:
 
             runs-on: ubuntu-latest
-            if: github.ref == 'refs/heads/QA' && contains(github.event.head_commit.message, 'MAJOR_RELEASE')
+            if: contains(github.event.head_commit.message, 'MAJOR_RELEASE')
             steps:
               - name: Checkout repository
                 uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
 
   build_no_release:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/QA' && !contains(github.event.head_commit.message, 'MINOR_RELEASE') && !contains(github.event.head_commit.message, 'MAJOR_RELEASE')
+    if: ${{ !contains(github.event.head_commit.message, 'MINOR_RELEASE') && !contains(github.event.head_commit.message, 'MAJOR_RELEASE') }}
 
     steps:
       - name: Checkout repository
