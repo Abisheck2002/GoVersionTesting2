@@ -6,4 +6,4 @@ Check4
 
 check6
 
-check
+checkq
