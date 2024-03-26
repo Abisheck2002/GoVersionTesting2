@@ -20,6 +20,7 @@ jobs:
         run: |
           # Find the latest tag if available
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
+          echo "Latest tag: $LATEST_TAG"
 
           if [ -z "$LATEST_TAG" ]; then
             # If no tags found, start with initial version and branch name
