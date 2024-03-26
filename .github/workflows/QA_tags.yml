@@ -22,9 +22,13 @@ jobs:
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
           echo "Latest tag: $LATEST_TAG"
 
+          #Find Branch_Name
+
+          Branch_Name="${GITHUB_REF#refs/heads/}"
+
           if [ -z "$LATEST_TAG" ]; then
             # If no tags found, start with initial version and branch name
-            NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
+            NEW_TAG="V1.0.0_$Branch_Name"
           else
             # Extract the version number and branch name from the latest tag
             VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
@@ -35,7 +39,7 @@ jobs:
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 + 1 ".0"}')
 
             # Construct the new tag
-            NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
+            NEW_TAG="V${NEW_VERSION}_$Branch_Name"
           fi
 
           echo "Generated new tag: $NEW_TAG"
@@ -64,10 +68,14 @@ jobs:
                   # Find the latest tag if available
                   LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
                   echo "Old tag: $LATEST_TAG"
+
+                  #Find Branch_Name
+
+                  Branch_Name="${GITHUB_REF#refs/heads/}"
         
                   if [ -z "$LATEST_TAG" ]; then
                     # If no tags found, start with initial version and branch name
-                    NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
+                    NEW_TAG="V1.0.0_$Branch_Name"
                   else
                     # Extract the version number and branch name from the latest tag
                     VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
@@ -78,7 +86,7 @@ jobs:
                     NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 +1 "." $2 ".0"}')
         
                     # Construct the new tag
-                    NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
+                    NEW_TAG="V${NEW_VERSION}_$Branch_Name"
                   fi
         
                   echo "Generated new tag: $NEW_TAG"
@@ -109,9 +117,13 @@ jobs:
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
           echo "Old tag: $LATEST_TAG"
 
+          #Find Branch_Name
+
+          Branch_Name="${GITHUB_REF#refs/heads/}"
+
           if [ -z "$LATEST_TAG" ]; then
             # If no tags found, start with initial version and branch name
-            NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
+            NEW_TAG="V1.0.0_$Branch_Name"
           else
             # Extract the version number and branch name from the latest tag
             VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
@@ -122,7 +134,7 @@ jobs:
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3 + 1}')
 
             # Construct the new tag
-            NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
+            NEW_TAG="V${NEW_VERSION}_$Branch_Name"
           fi
 
           echo "Generated new tag: $NEW_TAG"
