@@ -1,0 +1,67 @@
+name: Auto Tag on Commit
+
+on:
+  push:
+    branches:
+      - SB
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  build_no_release:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: Get branch name from pull request
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            SOURCE_BRANCH=$(echo "${{ github.event.pull_request.head.ref }}")
+            echo "Source branch: $SOURCE_BRANCH"
+          fi
+
+      - name: Generate Git Tag
+        id: generate_tag
+        run: |
+          # Find the latest tag if available
+          if [ "${{ github.event_name }}" == "push" ] || [ "${{ github.event_name }}" == "pull_request" ]; then
+              LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA"  || echo "")
+          fi
+
+          if [ -z "$LATEST_TAG" ]; then
+            # If no tags found, start with initial version and branch name
+            if [ "${{ github.event_name }}" == "push" ]; then
+              NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
+            elif [ "${{ github.event_name }}" == "pull_request" ]; then
+              NEW_TAG="V1.0.0_P1${{ github.event.pull_request.number }}"
+            fi
+          else
+            # Extract the version number and branch name from the latest tag
+            VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
+            VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
+            BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
+
+            # Increment the version number
+            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
+
+            # Construct the new tag
+            if [ "$SOURCE_BRANCH" == "QA" ]; then
+              NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
+            else
+              NEW_TAG="V${NEW_VERSION}.p1_SB${{ github.event.pull_request.number }}"
+            fi
+          fi
+
+          echo "Generated new tag: $NEW_TAG"
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+      - name: Push Git Tag
+        run: |
+          git config user.name "Abisheck2002"
+          git config user.email "abisheck.g@netxd.com"
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
