@@ -50,9 +50,9 @@ jobs:
 
             # Construct the new tag
             if [ "$SOURCE_BRANCH" == "QA" ]; then
-              NEW_TAG="V${NEW_VERSION}_SB"
+              NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
             else
-              NEW_TAG="V${NEW_VERSION}.P1_SB${{ github.event.pull_request.number }}"
+              NEW_TAG="V${NEW_VERSION}.P1_SB"
             fi
           fi
 
