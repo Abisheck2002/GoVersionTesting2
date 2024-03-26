@@ -39,6 +39,7 @@ jobs:
           fi
 
           echo "Generated new tag: $NEW_TAG"
+          echo "Old tag: $LATEST_TAG"
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
       - name: Push Git Tag
