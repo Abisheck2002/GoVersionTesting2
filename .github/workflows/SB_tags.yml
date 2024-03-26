@@ -8,7 +8,7 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  build_no_release:
+  build_SB_PULL_REQUEST:
     runs-on: ubuntu-latest
   
     steps:
