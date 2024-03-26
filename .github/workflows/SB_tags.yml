@@ -46,7 +46,7 @@ jobs:
 
             # Construct the new tag
             if [ "${{ github.event_name }}" == "push" ]; then
-              if [ "${{ github.head_ref }}" == "refs/heads/QA" ]; then  # Changed 'github.head_ref' to 'github.base_ref'
+              if [ "${{ github.ref }}" == "refs/heads/QA" ]; then  # Changed 'github.head_ref' to 'github.base_ref'
                 NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"    # Changed 'github.head_ref' to 'GITHUB_REF'
               else
                 NEW_TAG="V${NEW_VERSION}.P1_${GITHUB_REF#refs/heads/}"  # Changed 'github.head_ref' to 'GITHUB_REF'
