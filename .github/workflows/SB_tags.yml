@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - SB
-  pull_request:
-    types: [opened, reopened, synchronize]
 
 jobs:
   build_SB_PULL_REQUEST:
