@@ -20,7 +20,7 @@ jobs:
         run: |
           # Find the latest tag if available
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
-          echo "Old tag: $LATEST_TAG"
+          # echo "Old tag: $LATEST_TAG"
 
           if [ -z "$LATEST_TAG" ]; then
             # If no tags found, start with initial version and branch name
@@ -63,7 +63,7 @@ jobs:
                 run: |
                   # Find the latest tag if available
                   LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
-                  echo "Old tag: $LATEST_TAG"
+                  # echo "Old tag: $LATEST_TAG"
         
                   if [ -z "$LATEST_TAG" ]; then
                     # If no tags found, start with initial version and branch name
@@ -107,7 +107,7 @@ jobs:
         run: |
           # Find the latest tag if available
           LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
-          echo "Old tag: $LATEST_TAG"
+          # echo "Old tag: $LATEST_TAG"
 
           #Find branch name
 
