@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - QA
+      - master
 
 jobs:
   build_MINOR_RELEASE:
