@@ -21,18 +21,16 @@ jobs:
         id: generate_tag
         run: |
           # Find the latest tag if available
-          if [ "${{ github.event_name }}" == "push" ]; then
-            LATEST_TAG=$(git describe --tags --abbrev=0 || echo "")
-          elif [ "${{ github.event_name }}" == "pull_request" ]; then
-            LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA" || echo "")
+          if [ "${{ github.event_name }}" == "push" ] || [ "${{ github.event_name }}" == "pull_request" ]; then
+          LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA" || echo "")
           fi
 
           if [ -z "$LATEST_TAG" ]; then
             # If no tags found, start with initial version and branch name
             if [ "${{ github.event_name }}" == "push" ]; then
-              NEW_TAG="V1.0.0_${GITHUB_REF#refs/heads/}"
+              NEW_TAG="V1.0.0.P1_${GITHUB_REF#refs/heads/}"
             elif [ "${{ github.event_name }}" == "pull_request" ]; then
-              NEW_TAG="V1.0.0_P1${{ github.event.pull_request.number }}"
+              NEW_TAG="V1.0.0"
             fi
           else
             # Extract the version number and branch name from the latest tag
@@ -40,14 +38,14 @@ jobs:
             VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
             BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
 
-            # Increment the version number
+            
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
             # Construct the new tag
             if [ "${{ github.event_name }}" == "push" ]; then
-              NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"
+              NEW_TAG="V${NEW_VERSION}.P1_${GITHUB_REF#refs/heads/}"
             elif [ "${{ github.event_name }}" == "pull_request" ]; then
-              NEW_TAG="V${NEW_VERSION}_P1${{ github.event.pull_request.number }}"
+              NEW_TAG="V${NEW_VERSION}_SB"
             fi
           fi
 
