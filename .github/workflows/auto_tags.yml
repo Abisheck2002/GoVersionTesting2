@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - QA
-      - SB
 
 jobs:
   build_MINOR_RELEASE:
