@@ -45,12 +45,12 @@ jobs:
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
             # Construct the new tag
-            BRANCHNAME="${{ github.ref }}"
+            BRANCHNAME="${GITHUB_REF#refs/heads/}"
             echo "action ref:${{ github.action_ref}} "
             echo "action ref:${{ github.event_path}} "
             echo "action ref:${{ github.path}} "
             echo "action ref:${{ github.workflow_ref}} "
-            echo "action ref:${{ github.head_ref}} "
+            echo "action ref:$BRANCHNAME"
             echo "other side : "refs/heads/QA""
 
             if [ "${{ github.event_name }}" == "push" ]; then
