@@ -1,46 +1,28 @@
-name: Auto Tag on Commit
+name: Auto Tag on Merge
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - SB
 
 jobs:
   build_SB_PULL_REQUEST:
     runs-on: ubuntu-latest
-  
+
+    if: github.event.pull_request.merged == true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
 
-      - name: Generate Git Tag
-        id: generate_tag
+      - name: Extract Branch Names
         run: |
-          # Extract the base and head branches from the push event payload
-          BASE_BRANCH=$(echo "${{ github.ref }}" | sed 's|.*/||') 
-          head_BRANCH=$(echo "${{ github.head_ref }}" | sed 's|.*/||') 
-          B_BRANCH=$(echo "${{ github.base_ref }}" | sed 's|.*/||')  # Extract branch name from ref
-          HEAD_BRANCH=$(git rev-parse --abbrev-ref HEAD)  # Get current branch name
-
-          # Your existing logic for generating tags goes here...
-          
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
           echo "Base ref: $BASE_BRANCH"
           echo "Head ref: $HEAD_BRANCH"
-          echo "head ref: $head_BRANCH"
-          echo "H ref: $B_BRANCH"
 
-          # Modify your logic to use BASE_BRANCH and HEAD_BRANCH accordingly
-          
-          # Example:
-          # if [ "$HEAD_BRANCH" == "QA" ]; then
-          #   NEW_TAG="V${NEW_VERSION}_${BASE_BRANCH}"
-          # else
-          #   NEW_TAG="V${NEW_VERSION}.P1_${BASE_BRANCH}"
-          # fi
-          
-          # echo "Generated new tag: $NEW_TAG"
-          # echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-
-      # Rest of your workflow steps...
+      # Your other workflow steps...
