@@ -19,13 +19,17 @@ jobs:
         id: generate_tag
         run: |
           # Extract the base and head branches from the push event payload
-          BASE_BRANCH=$(echo "${{ github.ref }}" | sed 's|.*/||')  # Extract branch name from ref
+          BASE_BRANCH=$(echo "${{ github.ref }}" | sed 's|.*/||') 
+          head_BRANCH=$(echo "${{ github.head_ref }}" | sed 's|.*/||') 
+          B_BRANCH=$(echo "${{ github.base_ref }}" | sed 's|.*/||')  # Extract branch name from ref
           HEAD_BRANCH=$(git rev-parse --abbrev-ref HEAD)  # Get current branch name
 
           # Your existing logic for generating tags goes here...
           
           echo "Base ref: $BASE_BRANCH"
           echo "Head ref: $HEAD_BRANCH"
+          echo "head ref: $head_BRANCH"
+          echo "H ref: $B_BRANCH"
 
           # Modify your logic to use BASE_BRANCH and HEAD_BRANCH accordingly
           
