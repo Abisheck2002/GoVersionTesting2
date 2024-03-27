@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - SB
-  
 
 jobs:
   build_SB_PULL_REQUEST:
@@ -19,54 +18,25 @@ jobs:
       - name: Generate Git Tag
         id: generate_tag
         run: |
-          # Find the latest tag if available
-          if [ "${{ github.event_name }}" == "push" ]; then
-            LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA" || echo "")
-    
-          fi
+          # Extract the base and head branches from the push event payload
+          BASE_BRANCH=$(echo "${{ github.ref }}" | sed 's|.*/||')  # Extract branch name from ref
+          HEAD_BRANCH=$(git rev-parse --abbrev-ref HEAD)  # Get current branch name
 
-          # If no tag found
-          if [ -z "$LATEST_TAG" ]; then
-            # If no tags found, start with initial version and branch name
-            if [ "${{ github.event_name }}" == "push" ]; then
-              if [ "${{ github.ref }}" == "refs/heads/QA" ]; then
-                NEW_VERSION="1.0.0"
-              else
-                NEW_VERSION="1.0.0.P1"
-              fi
-            fi
-          else
-            # Extract the version number and branch name from the latest tag
-            VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
-            VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-            BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
-            
-            # Increment the version number
-            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
+          # Your existing logic for generating tags goes here...
+          
+          echo "Base ref: $BASE_BRANCH"
+          echo "Head ref: $HEAD_BRANCH"
 
-            # Construct the new tag
-            BRANCHNAME="${{ github.ref }}"
-            
-            echo "other side : "refs/heads/QA""
-            echo "other side : ${{ github.head_ref }}"
-            echo "other side : "${{ github.head_ref }}""
-            echo "other side : ${{ github.base_ref }}"
+          # Modify your logic to use BASE_BRANCH and HEAD_BRANCH accordingly
+          
+          # Example:
+          # if [ "$HEAD_BRANCH" == "QA" ]; then
+          #   NEW_TAG="V${NEW_VERSION}_${BASE_BRANCH}"
+          # else
+          #   NEW_TAG="V${NEW_VERSION}.P1_${BASE_BRANCH}"
+          # fi
+          
+          # echo "Generated new tag: $NEW_TAG"
+          # echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
-            if [ "${{ github.event_name }}" == "push" ]; then
-              if [ "${{ github.head_ref }}" == "refs/heads/QA" ]; then  # Changed 'github.head_ref' to 'github.base_ref'
-                NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"    # Changed 'github.head_ref' to 'GITHUB_REF'
-              else
-                NEW_TAG="V${NEW_VERSION}.P1_${GITHUB_REF#refs/heads/}"  # Changed 'github.head_ref' to 'GITHUB_REF'
-              fi
-            fi
-          fi
-
-          echo "Generated new tag: $NEW_TAG"
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-
-      - name: Push Git Tag
-        run: |
-          git config user.name "Abisheck2002"
-          git config user.email "abisheck.g@netxd.com"
-          git tag $NEW_TAG
-          git push origin $NEW_TAG
+      # Rest of your workflow steps...
