@@ -24,7 +24,7 @@ jobs:
 
           #Find Branch_Name
 
-          Branch_Name="${GITHUB_REF#refs/heads/}"
+          Branch_Name="qa"
           echo "Branch Name:$Branch_Name"
 
           if [ -z "$LATEST_TAG" ]; then
@@ -72,7 +72,7 @@ jobs:
 
                   #Find Branch_Name
 
-                  Branch_Name="${GITHUB_REF#refs/heads/}"
+                  Branch_Name="qa"
                   echo "Branch Name:$Branch_Name"
         
                   if [ -z "$LATEST_TAG" ]; then
@@ -121,7 +121,7 @@ jobs:
 
           #Find Branch_Name
 
-          Branch_Name="${GITHUB_REF#refs/heads/}"
+          Branch_Name="qa"
           echo "Branch Name:$Branch_Name"
 
           if [ -z "$LATEST_TAG" ]; then
