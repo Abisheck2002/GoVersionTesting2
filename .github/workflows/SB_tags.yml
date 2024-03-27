@@ -46,9 +46,11 @@ jobs:
 
             # Construct the new tag
             BRANCHNAME="${{ github.ref }}"
-            echo "head erf: ${{ github.head_ref }}"
-            echo "base ref:${{ github.base_ref }} "
-            echo "base ref:${{ github.action_path}} "
+            echo "action ref:${{ github.action_ref}} "
+            echo "action ref:${{ github.event_path}} "
+            echo "action ref:${{ github.path}} "
+            echo "action ref:${{ github.workflow_ref}} "
+            echo "action ref:${{ github.head_ref}} "
             echo "other side : "refs/heads/QA""
 
             if [ "${{ github.event_name }}" == "push" ]; then
