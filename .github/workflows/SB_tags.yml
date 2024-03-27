@@ -26,7 +26,7 @@ jobs:
     
           # Find Branch Name
 
-            Branch_Name="sb"
+            Branch_name="sb"
 
           # If no tag found
           if [ -z "$LATEST_TAG" ]; then
@@ -53,10 +53,10 @@ jobs:
 
             if [ "${{ github.event_name }}" == "pull_request" ]; then
               if [ "$HEAD_BRANCH" == "QA" ]; then  
-                NEW_TAG="V${NEW_VERSION}_$Branch_Name"   
+                NEW_TAG="V${NEW_VERSION}_$Branch_name"   
               else
                 # NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3 +1 }')
-                NEW_TAG="V${NEW_VERSION}.P1_$Branch_Name" 
+                NEW_TAG="V${NEW_VERSION}.P1_$Branch_name" 
               fi
             fi
           fi
