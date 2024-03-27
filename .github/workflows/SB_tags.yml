@@ -46,10 +46,8 @@ jobs:
 
             # Construct the new tag
             BRANCHNAME="${GITHUB_REF#refs/heads/}"
-            echo "action ref:${{ github.action_ref}} "
+            echo "action ref:${{ github.ref}} "
             echo "action ref:${{ github.event_path}} "
-            echo "action ref:${{ github.path}} "
-            echo "action ref:${{ github.workflow_ref}} "
             echo "action ref:$BRANCHNAME"
             echo "other side : "refs/heads/QA""
 
