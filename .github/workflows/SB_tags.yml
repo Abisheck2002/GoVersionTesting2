@@ -21,10 +21,10 @@ jobs:
         id: generate_tag
         run: |
           # Find the latest tag if available
-          if [ "${{ github.event_name }}" == "push" ]; then
+          
             LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA" || echo "")
     
-          fi
+          
 
           # If no tag found
           if [ -z "$LATEST_TAG" ]; then
@@ -47,7 +47,7 @@ jobs:
 
             # Construct the new tag
             BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-             HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+            HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
             echo "Base ref: $BASE_BRANCH"
             echo "Head ref: $HEAD_BRANCH"
 
