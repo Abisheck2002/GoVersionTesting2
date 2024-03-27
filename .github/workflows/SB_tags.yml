@@ -24,9 +24,7 @@ jobs:
           
             LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA" || echo "")
     
-          # Find Branch Name
-
-            Branch_name="sb"
+          
 
           # If no tag found
           if [ -z "$LATEST_TAG" ]; then
@@ -43,20 +41,22 @@ jobs:
             VERSION_BRANCH=$(echo "$LATEST_TAG" | cut -d'_' -f1)
             VERSION=$(echo "$VERSION_BRANCH" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
             BRANCH_NAME=$(echo "$LATEST_TAG" | cut -d'_' -f2)
+            
+            # Increment the version number
+            NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
             # Construct the new tag
-            
-            # Find head_ref
-
+            BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
             HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+            echo "Base ref: $BASE_BRANCH"
             echo "Head ref: $HEAD_BRANCH"
 
             if [ "${{ github.event_name }}" == "pull_request" ]; then
-              if [ "$HEAD_BRANCH" == "QA" ]; then  
-                NEW_TAG="V${NEW_VERSION}_$Branch_name"   
+              if [ "${{ github.event.pull_request.head.ref }}" == "QA" ]; then  # Changed 'github.head_ref' to 'github.base_ref'
+                NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"    # Changed 'github.head_ref' to 'GITHUB_REF'
               else
                 # NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3 +1 }')
-                NEW_TAG="V${NEW_VERSION}.P1_$Branch_name" 
+                NEW_TAG="V${NEW_VERSION}.P1_${GITHUB_REF#refs/heads/}"  # Changed 'github.head_ref' to 'GITHUB_REF'
               fi
             fi
           fi
