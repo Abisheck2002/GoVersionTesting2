@@ -46,6 +46,7 @@ jobs:
 
             # Construct the new tag
             BRANCHNAME="${GITHUB_REF#refs/heads/}"
+            echo "BRANCHNAME: ${{ github.head_ref }}"
             echo "BRANCHNAME: $BRANCHNAME"
             echo "BRANCHNAME: "QA""
             if [ "${{ github.event_name }}" == "push" ]; then
