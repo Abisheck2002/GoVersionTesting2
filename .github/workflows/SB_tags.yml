@@ -48,7 +48,7 @@ jobs:
             BRANCHNAME="${{ github.ref }}"
             echo "head ref: ${{ github.event.pull_request.base.ref }}"
             echo "base ref:${{github.ref_name}} "
-            echo "chek ref:${{github.event.pull_request.base.ref}} "
+            echo "chek ref:${github.event.pull_request.base.ref} "
             
             echo "other side : "refs/heads/QA""
 
