@@ -20,7 +20,8 @@ jobs:
         id: generate_tag
         run: |
           # Find the latest tag if available
-          if [ "${{ github.event_name }}" == "push" ]; then
+          if [ "${{ github.event_name }}" == "push" ] || [ "${{ github.event_name }}" == "pull_request" ]; then
+
             LATEST_TAG=$(git describe --tags --abbrev=0 "origin/QA" || echo "")
     
           fi
@@ -46,10 +47,11 @@ jobs:
 
             # Construct the new tag
             BRANCHNAME="${GITHUB_REF#refs/heads/}"
-            echo "BRANCHNAME: $BRANCHNAME"
-            echo "BRANCHNAME: "QA""
-            if [ "${{ github.event_name }}" == "push" ]; then
-              if [ "$BRANCHNAME" == "QA" ]; then  # Changed 'github.head_ref' to 'github.base_ref'
+            echo "Generated new tag: ${{ github.head_ref }}"
+    
+
+            if [ "${{ github.event_name }}" == "pull_request" ]; then
+              if [ "${{ github.head_ref }}" == "refs/heads/QA" ]; then  # Changed 'github.head_ref' to 'github.base_ref'
                 NEW_TAG="V${NEW_VERSION}_${GITHUB_REF#refs/heads/}"    # Changed 'github.head_ref' to 'GITHUB_REF'
               else
                 NEW_TAG="V${NEW_VERSION}.P1_${GITHUB_REF#refs/heads/}"  # Changed 'github.head_ref' to 'GITHUB_REF'
