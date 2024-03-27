@@ -53,6 +53,14 @@ jobs:
 
             HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
             echo "Head ref: $HEAD_BRANCH"
+            echo "commits ref: ${{ github.event.pull_request.commits }}"
+            echo "requested team ref: ${{ github.event.pull_request.requested_teams }}"
+            echo "commit url ref: ${{ github.event.pull_request.commits_url }}"
+            echo "commit id ref: ${{ github.event.pull_request.commits.id }}"
+            echo "closed at ref: ${{ github.event.pull_request.closed_at }}"
+            echo "id ref: ${{ github.event.pull_request.id}}"
+            echo "merge commit sha ref: ${{ github.event.pull_request.merge_commit_sha}}"
+            echo "merge at ref: ${{ github.event.pull_request.merged_at }}"
 
             if [ "${{ github.event_name }}" == "pull_request" ]; then
               if [ "$HEAD_BRANCH" == "QA" ]; then  
