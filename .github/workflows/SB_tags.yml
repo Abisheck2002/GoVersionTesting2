@@ -1,7 +1,6 @@
 name: Auto Tag on Commit
 
 on:
-  push:
   pull_request:
     types: [closed]
     branches:
