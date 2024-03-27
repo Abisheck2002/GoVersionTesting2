@@ -48,7 +48,7 @@ jobs:
             BRANCHNAME="${{ github.ref }}"
             echo "head erf: ${{ github.head_ref }}"
             echo "base ref:${{ github.base_ref }} "
-            echo "base ref:${{ github.ref }} "
+            echo "base ref:${{ github.action_path}} "
             echo "other side : "refs/heads/QA""
 
             if [ "${{ github.event_name }}" == "push" ]; then
