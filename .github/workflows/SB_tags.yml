@@ -45,8 +45,8 @@ jobs:
             NEW_VERSION=$(echo "$VERSION" | awk -F'.' '{print $1 "." $2 "." $3}')
 
             # Construct the new tag
-            BRANCHNAME="${GITHUB_REF#refs/heads/}"
-            echo "action ref:${{ github.ref}} "
+            BRANCHNAME="${BRANCH_NAME#refs/heads/}"
+            echo "action ref:${{ github.secret_source}} "
             echo "action ref:${{ github.event_path}} "
             echo "action ref:$BRANCHNAME"
             echo "other side : "refs/heads/QA""
