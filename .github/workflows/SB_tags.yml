@@ -67,16 +67,7 @@ jobs:
           # Get the commit ID of the branch
           COMMIT_ID=$(git rev-parse HEAD)
           echo "Commit ID: $COMMIT_ID"
-          HEAD_REF=$(git branch --contains $COMMIT_ID --format='%(refname:short)' | grep -v 'detached' | head -1)
-
-          BASE_REF=$(git branch --contains $COMMIT_ID --format='%(refname:short)' | grep -v 'detached' | grep -v 'QA' | head -1)
-
-
-          echo "head ID: $HEAD_REF"
-          echo "base ID: $BASE_REF"
-
-
-
+          
 
           echo "Generated new tag: $NEW_TAG"
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
