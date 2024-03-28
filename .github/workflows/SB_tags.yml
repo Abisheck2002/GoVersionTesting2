@@ -67,7 +67,8 @@ jobs:
           # Get the commit ID of the branch
           COMMIT_ID=$(git rev-parse HEAD)
           echo "Commit ID: $COMMIT_ID"
-          HEAD_REF=$(git branch --contains $COMMIT_ID --format='%(refname:short)' | grep -v 'detached' | head -1)
+          HEAD_REF=$(git branch -r --contains $COMMIT_ID | grep -v '/QA$' | sed 's#^origin/##' | head -1)
+
           echo "head ID: $HEAD_REF"
 
 
